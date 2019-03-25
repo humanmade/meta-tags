@@ -1,0 +1,16 @@
+{
+    "name": "humanmade/meta-tags",
+    "description": "Meta tag generator for Opengraph, Twitter & JSON+LD",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "composer/installers": "^1.6"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Human Made",
+            "email": "hello@humanmade.com"
+        }
+    ],
+    "require": {}
+}
