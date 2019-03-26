@@ -42,7 +42,7 @@ function sanitize_username( string $string ) : string {
 
 	// URLs.
 	if ( strpos( $string, 'twitter.com' ) !== false ) {
-		$string = preg_replace( '#twitter\.com/([A-Za-z0-9_]{1,15})#', '$1', $string );
+		$string = preg_replace( '#^https://twitter\.com/([A-Za-z0-9_]{1,15})$#', '$1', $string );
 	}
 
 	return '@' . substr( ltrim( $string, '@' ), 0, 15 );
@@ -57,7 +57,7 @@ function sanitize_username( string $string ) : string {
 function get_default_meta( array $context ) : array {
 	$meta = [];
 	$meta['card'] = $context['image'] ? 'summary_large_image' : 'summary';
-	$meta['site'] = get_social_urls()['twitter'] ?? false;
+	$meta['site'] = sanitize_username( get_social_urls()['twitter'] ?? '' );
 	$meta['title'] = $context['title'];
 	$meta['description'] = $context['description'];
 	$meta['image'] = $context['image'];
