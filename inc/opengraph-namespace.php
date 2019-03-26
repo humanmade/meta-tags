@@ -11,9 +11,9 @@ use function HM\MetaTags\get_meta_for_context;
 use function HM\MetaTags\to_meta_tags;
 
 function bootstrap() {
-	add_filter( 'hm.metatags.context.opengraph.author', __NAMESPACE__ . '\\author' );
-	add_filter( 'hm.metatags.context.opengraph.front_page', __NAMESPACE__ . '\\front_page' );
-	add_filter( 'hm.metatags.context.opengraph.singular', __NAMESPACE__ . '\\singular' );
+	add_filter( 'hm.metatags.context.opengraph.author', __NAMESPACE__ . '\\author', 10, 2 );
+	add_filter( 'hm.metatags.context.opengraph.front_page', __NAMESPACE__ . '\\front_page', 10, 2 );
+	add_filter( 'hm.metatags.context.opengraph.singular', __NAMESPACE__ . '\\singular', 10, 2 );
 	add_filter( 'language_attributes', __NAMESPACE__ . '\\add_xmlns' );
 	add_action( 'wp_head', __NAMESPACE__ . '\\to_html' );
 }
@@ -34,7 +34,7 @@ function add_xmlns( string $xmlns ) : string {
  * @return array
  */
 function get_default_meta( array $meta, array $context ) : array {
-	$meta['site_name'] = $context['site_name'];
+	$meta['site_name'] = get_bloginfo( 'name' );
 	$meta['locale'] = $context['locale'];
 	$meta['type'] = 'website';
 	$meta['title'] = $context['title'];
@@ -82,7 +82,7 @@ function singular( array $meta, array $context ) : array {
 	$meta['article:author'] = get_author_posts_url( $context['object']->post_author );
 
 	if ( $context['category'] ?? false ) {
-		$meta['article:section'] = array_unshift( $context['categories'] );
+		$meta['article:section'] = array_shift( $context['category'] );
 	}
 
 	if ( $context['post_tag'] ?? false ) {

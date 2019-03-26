@@ -7,6 +7,8 @@
 
 namespace HM\MetaTags;
 
+use WP_Post;
+
 /**
  * Get the current URL.
  *
@@ -31,6 +33,8 @@ function get_current_url( bool $query_string = false ) : string {
  * @return array
  */
 function get_meta_for_context( string $type = 'default' ) : array {
+	global $page, $pages;
+
 	if ( ! did_action( 'wp' ) ) {
 		trigger_error( 'HM\MetaTags\get_contextual_data() was called before the "wp" action', E_USER_WARNING );
 		return [];
@@ -84,7 +88,7 @@ function get_meta_for_context( string $type = 'default' ) : array {
 	// Singular post, any type.
 	if ( is_singular() ) {
 		$context['title'] = get_the_title( $object_id );
-		$context['description'] = get_the_excerpt( $object_id );
+		$context['description'] = get_the_excerpt( $object );
 		$context['url'] = get_the_permalink( $object );
 		$context['author'] = get_the_author_meta( 'display_name' );
 
@@ -247,6 +251,23 @@ function get_meta_for_context( string $type = 'default' ) : array {
 }
 
 /**
+ * Shim to get the excerpt outside of the loop
+ *
+ * @param WP_Post $post
+ * @return void
+ */
+function get_the_excerpt( WP_Post $post ) {
+	ob_start();
+	setup_postdata( $post );
+	the_excerpt();
+	$excerpt = ob_get_clean();
+	$excerpt = wp_strip_all_tags( $excerpt );
+	wp_reset_postdata();
+
+	return $excerpt;
+}
+
+/**
  * Output an associative array as HTML meta tags.
  *
  * @param array $meta The meta data to display.
@@ -267,18 +288,18 @@ function to_meta_tags( array $meta, string $prefix = '', string $name_attribute 
 
 		foreach( $meta[ $key ] as $value ) {
 			$carry = sprintf(
-				"%s\n\t\t<meta %s=\"%s%s\" %s=\"%s\" />",
+				"%s<meta %s=\"%s%s\" %s=\"%s\" />\n",
 				$carry,
 				sanitize_key( $name_attribute ),
-				sanitize_key( $prefix ),
-				sanitize_key( $key ),
+				esc_attr( $prefix ),
+				esc_attr( $key ),
 				sanitize_key( $value_attribute ),
 				esc_attr( $value )
 			);
 		}
 
 		return $carry;
-	}, '' );
+	}, "\n" );
 
 	echo $output;
 }
@@ -296,9 +317,9 @@ function to_script_tag( array $meta, string $type = 'application/ld+json' ) {
 	}
 
 	$output = sprintf(
-		'<script type="%s">%s</script>',
+		"\n<script type=\"%s\">\n%s\n</script>\n\n",
 		esc_attr( $type ),
-		wp_json_encode( $meta, JSON_UNESCAPED_UNICODE )
+		wp_json_encode( $meta, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT )
 	);
 
 	echo $output;
@@ -341,7 +362,7 @@ function get_social_urls() : array {
 		'tumblr' => '',
 	] );
 
-	return $social_urls;
+	return $social_urls ?? [];
 }
 
 /**
@@ -357,5 +378,5 @@ function get_fallback_image() : string {
 	 */
 	$fallback_image = apply_filters( 'hm.metatags.fallback_image', '' );
 
-	return $fallback_image;
+	return $fallback_image ?? '';
 }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meta Tags
  * Description: Meta tags helper for WordPress including Opengraph, Twitter and JSON+LD support.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Human Made
  * License: GPL-3.0
  */
@@ -40,7 +40,7 @@ add_action( 'plugins_loaded', function () {
 	 *
 	 * @param bool $enable If true outputs JSON+LD script tags.
 	 */
-	$enable_json_ld = apply_filters( 'hm.metatags.opengraph', true );
+	$enable_json_ld = apply_filters( 'hm.metatags.json_ld', true );
 	if ( $enable_json_ld ) {
 		require_once __DIR__ . '/inc/json-ld-namespace.php';
 		JSONLD\bootstrap();

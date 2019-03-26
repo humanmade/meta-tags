@@ -14,13 +14,13 @@ use function HM\MetaTags\get_meta_for_context;
 use function HM\MetaTags\to_script_tag;
 
 function bootstrap() {
-	add_filter( 'hm.metatags.context.json_ld.archive', __NAMESPACE__ . '\\archive' );
-	add_filter( 'hm.metatags.context.json_ld.author', __NAMESPACE__ . '\\author' );
-	add_filter( 'hm.metatags.context.json_ld.blog', __NAMESPACE__ . '\\archive' );
-	add_filter( 'hm.metatags.context.json_ld.front_page', __NAMESPACE__ . '\\front_page' );
-	add_filter( 'hm.metatags.context.json_ld.search', __NAMESPACE__ . '\\search' );
-	add_filter( 'hm.metatags.context.json_ld.singular', __NAMESPACE__ . '\\singular' );
-	add_filter( 'hm.metatags.context.json_ld.taxonomy', __NAMESPACE__ . '\\archive' );
+	add_filter( 'hm.metatags.context.json_ld.archive', __NAMESPACE__ . '\\archive', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.author', __NAMESPACE__ . '\\author', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.blog', __NAMESPACE__ . '\\archive', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.front_page', __NAMESPACE__ . '\\front_page', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.search', __NAMESPACE__ . '\\search', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.singular', __NAMESPACE__ . '\\singular', 10, 2 );
+	add_filter( 'hm.metatags.context.json_ld.taxonomy', __NAMESPACE__ . '\\archive', 10, 2 );
 	add_action( 'wp_head', __NAMESPACE__ . '\\to_html' );
 }
 
@@ -48,6 +48,8 @@ function get_person( WP_User $user ) : array {
 	} );
 	$meta['sameAs'] = $contact_methods;
 
+	$meta = array_filter( $meta );
+
 	return $meta;
 }
 
@@ -66,6 +68,8 @@ function front_page( array $meta, array $context ) : array {
 	$meta['url'] = get_home_url();
 	$meta['logo'] = $context['logo'] ?? false;
 	$meta['sameAs'] = array_values( get_social_urls() );
+
+	$meta = array_filter( $meta );
 
 	return $meta;
 }

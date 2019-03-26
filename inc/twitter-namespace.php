@@ -12,8 +12,8 @@ use function HM\MetaTags\get_social_urls;
 use function HM\MetaTags\to_meta_tags;
 
 function bootstrap() {
-	add_filter( 'hm.metatags.context.twitter.front_page', __NAMESPACE__ . '\\front_page' );
-	add_filter( 'hm.metatags.context.twitter.singular', __NAMESPACE__ . '\\singular' );
+	add_filter( 'hm.metatags.context.twitter.front_page', __NAMESPACE__ . '\\front_page', 10, 2 );
+	add_filter( 'hm.metatags.context.twitter.singular', __NAMESPACE__ . '\\singular', 10, 2 );
 	add_filter( 'user_contactmethods', __NAMESPACE__ . '\\add_contact_method' );
 	add_action( 'wp_head', __NAMESPACE__ . '\\to_html' );
 }
