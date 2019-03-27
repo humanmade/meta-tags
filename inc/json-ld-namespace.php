@@ -155,5 +155,6 @@ function search( array $meta, array $context ) : array {
  */
 function to_html() {
 	$meta = get_meta_for_context( 'json_ld' );
+	$meta = array_merge( [ '@context' => 'https://schema.org' ], $meta );
 	to_script_tag( $meta );
 }
