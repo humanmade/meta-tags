@@ -95,7 +95,14 @@ function singular( array $meta, array $context ) : array {
 	$meta['author'] = [
 		get_person( get_user_by( 'id', $context['object']->post_author ) )
 	];
-	$meta['keywords'] = $context['post_tag'];
+	$meta['keywords'] = [];
+	foreach ( get_post_taxonomies( $context['object'] ) as $taxonomy ) {
+		if ( $context['taxonomies'][ $taxonomy ] ?? false ) {
+			$meta['keywords'] = array_merge( $context['taxonomies'][ $taxonomy ], $meta['keywords'] );
+			$meta['keywords'] = array_unique( $meta['keywords'] );
+		}
+	}
+	$meta['keywords'] = implode( ', ', $meta['keywords'] );
 	$meta['image'] = $context['image'];
 	$meta['url'] = $context['url'];
 	$meta['publisher'] = [

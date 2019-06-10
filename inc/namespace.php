@@ -97,12 +97,17 @@ function get_meta_for_context( string $type = 'default' ) : array {
 			$context['image_id'] = get_post_thumbnail_id( $object );
 		}
 
+		$context['taxonomies'] = [];
+
 		foreach ( get_object_taxonomies( $object ) as $taxonomy ) {
 			if ( is_object_in_taxonomy( $object->post_type, $taxonomy ) ) {
+				$context[ $taxonomy ] = [];
+				$context['taxonomies'][ $taxonomy ] = [];
 				$terms = get_the_terms( $object, $taxonomy );
 				if ( is_array( $terms ) ) {
 					$terms = wp_list_pluck( $terms, 'name' );
 					$context[ $taxonomy ] = $terms;
+					$context['taxonomies'][ $taxonomy ] = $terms;
 				}
 			}
 		}

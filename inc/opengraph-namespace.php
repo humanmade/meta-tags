@@ -81,12 +81,12 @@ function singular( array $meta, array $context ) : array {
 	$meta['article:expiration_time'] = false;
 	$meta['article:author'] = get_author_posts_url( $context['object']->post_author );
 
-	if ( $context['category'] ?? false ) {
-		$meta['article:section'] = array_shift( $context['category'] );
+	if ( $context['taxonomies']['category'] ?? false ) {
+		$meta['article:section'] = array_shift( $context['taxonomies']['category'] );
 	}
 
-	if ( $context['post_tag'] ?? false ) {
-		$meta['article:tag'] = $context['post_tag'];
+	if ( $context['taxonomies']['post_tag'] ?? false ) {
+		$meta['article:tag'] = $context['taxonomies']['post_tag'];
 	}
 
 	return $meta;
@@ -102,8 +102,8 @@ function singular( array $meta, array $context ) : array {
 function author( array $meta, array $context ) : array {
 	$meta = get_default_meta( $meta, $context );
 	$meta['type'] = 'profile';
-	$meta['profile:first_name'] = $data['object']->get( 'first_name' );
-	$meta['profile:last_name'] = $data['object']->get( 'last_name' );
+	$meta['profile:first_name'] = $context['object']->get( 'first_name' );
+	$meta['profile:last_name'] = $context['object']->get( 'last_name' );
 
 	return $meta;
 }
