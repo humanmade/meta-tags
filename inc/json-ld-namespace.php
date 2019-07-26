@@ -67,7 +67,7 @@ function front_page( array $meta, array $context ) : array {
 	$meta['description'] = get_bloginfo( 'description' );
 	$meta['url'] = get_home_url();
 	$meta['logo'] = $context['logo'] ?? false;
-	$meta['sameAs'] = array_values( get_social_urls() );
+	$meta['sameAs'] = array_filter( array_values( get_social_urls() ) );
 
 	$meta = array_filter( $meta );
 
