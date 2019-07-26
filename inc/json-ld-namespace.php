@@ -94,7 +94,7 @@ function singular( array $meta, array $context ) : array {
 	$meta['mainEntityOfPage'] = get_the_permalink( $context['object_id'] );
 	
 	// Post author is only set for post types that support it.
-	if ( post_type_supports( $context['object']->post_type, 'author' ) && isset( $context['object']->post_author ) ) {
+	if ( post_type_supports( $context['object']->post_type, 'author' ) && ! empty( $context['object']->post_author ) ) {
 		$meta['author'] = [
 			get_person( get_user_by( 'id', $context['object']->post_author ) )
 		];
