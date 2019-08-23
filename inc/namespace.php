@@ -243,6 +243,9 @@ function get_meta_for_context( string $type = 'default' ) : array {
 		$meta = apply_filters( "hm.metatags.context.{$type}.404", [], $context );
 	}
 
+	// Sanitize the meta data.
+	$meta = array_map( __NAMESPACE__ . '\\sanitize_data', $meta );
+
 	/**
 	 * Filter final meta data.
 	 *
@@ -253,6 +256,24 @@ function get_meta_for_context( string $type = 'default' ) : array {
 	$meta = array_filter( $meta );
 
 	return $meta;
+}
+
+/**
+ * Sanitize the data for output as meta tags / JSON.
+ *
+ * @param mixed $value Value to sanitize.
+ * @return mixed
+ */
+function sanitize_data( $value ) {
+	if ( is_array( $value ) ) {
+		$value = array_map( __NAMESPACE__ . '\\sanitize_data', $value );
+	}
+
+	if ( is_string( $value ) ) {
+		$value = wp_strip_all_tags( $value );
+	}
+
+	return $value;
 }
 
 /**
@@ -299,7 +320,7 @@ function to_meta_tags( array $meta, string $prefix = '', string $name_attribute 
 				esc_attr( $prefix ),
 				esc_attr( $key ),
 				sanitize_key( $value_attribute ),
-				esc_attr( $value )
+				esc_attr( wp_strip_all_tags( $value ) )
 			);
 		}
 
