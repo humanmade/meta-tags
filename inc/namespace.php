@@ -20,7 +20,7 @@ function get_current_url( bool $query_string = false ) : string {
 		'http://%s%s%s',
 		$_SERVER['HTTP_HOST'],
 		$_SERVER['REQUEST_URI'],
-		$_SERVER['QUERY_STRING'] && $query_string ? '?' . $_SERVER['QUERY_STRING'] : ''
+		isset( $_SERVER['QUERY_STRING'] ) && $query_string ? '?' . $_SERVER['QUERY_STRING'] : ''
 	);
 	return set_url_scheme( $url );
 }
