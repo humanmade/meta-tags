@@ -95,9 +95,13 @@ function singular( array $meta, array $context ) : array {
 	
 	// Post author is only set for post types that support it.
 	if ( post_type_supports( $context['object']->post_type, 'author' ) && ! empty( $context['object']->post_author ) ) {
-		$meta['author'] = [
-			get_person( get_user_by( 'id', $context['object']->post_author ) )
-		];
+		$author = get_user_by( 'id', $context['object']->post_author );
+
+		if ( $author instanceof WP_User ) {
+			$meta['author'] = [
+				get_person( $author ),
+			];
+		}
 	}
 	
 	$meta['keywords'] = [];
