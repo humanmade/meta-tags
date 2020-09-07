@@ -42,7 +42,7 @@ function get_default_meta( array $meta, array $context ) : array {
 	$meta['image'] = $context['image'];
 	$meta['url'] = $context['url'];
 
-	if ( $context['image'] ?? false && $context['image_id'] ?? false ) {
+	if ( ! empty( $context['image'] ) && isset( $context['image_id'] ) ) {
 		$meta['image:alt'] = get_post_meta( $context['image_id'], '_wp_attachment_image_alt', true );
 	}
 
