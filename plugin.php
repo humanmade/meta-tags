@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Meta Tags
  * Description: Meta tags helper for WordPress including Opengraph, Twitter and JSON+LD support.
- * Version: 0.1.6
+ * Version: 0.1.7
  * Author: Human Made
  * License: GPL-3.0
  */
