@@ -102,8 +102,11 @@ function singular( array $meta, array $context ) : array {
 function author( array $meta, array $context ) : array {
 	$meta = get_default_meta( $meta, $context );
 	$meta['type'] = 'profile';
-	$meta['profile:first_name'] = $context['object']->get( 'first_name' );
-	$meta['profile:last_name'] = $context['object']->get( 'last_name' );
+
+	if ( ! empty( $context['object'] ) ) {
+		$meta['profile:first_name'] = $context['object']->get( 'first_name' );
+		$meta['profile:last_name'] = $context['object']->get( 'last_name' );
+	}
 
 	return $meta;
 }

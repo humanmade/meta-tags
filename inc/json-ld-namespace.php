@@ -92,7 +92,7 @@ function singular( array $meta, array $context ) : array {
 	$meta['datePublished'] = get_the_date( 'c', $context['object'] );
 	$meta['dateModified'] = get_the_modified_date( 'c', $context['object'] );
 	$meta['mainEntityOfPage'] = get_the_permalink( $context['object_id'] );
-	
+
 	// Post author is only set for post types that support it.
 	if ( post_type_supports( $context['object']->post_type, 'author' ) && ! empty( $context['object']->post_author ) ) {
 		$author = get_user_by( 'id', $context['object']->post_author );
@@ -103,7 +103,7 @@ function singular( array $meta, array $context ) : array {
 			];
 		}
 	}
-	
+
 	$meta['keywords'] = [];
 	foreach ( get_post_taxonomies( $context['object'] ) as $taxonomy ) {
 		if ( $context['taxonomies'][ $taxonomy ] ?? false ) {
@@ -146,7 +146,10 @@ function archive( array $meta, array $context ) : array {
  * @return array
  */
 function author( array $meta, array $context ) : array {
-	$meta = get_person( $context['object'] );
+	if ( ! empty( $context['object'] ) ) {
+		$meta = get_person( $context['object'] );
+	}
+
 	return $meta;
 }
 
