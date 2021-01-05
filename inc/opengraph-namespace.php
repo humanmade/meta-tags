@@ -25,7 +25,7 @@ function bootstrap() {
  * @return string
  */
 function add_xmlns( string $xmlns ) : string {
-	return $xmlns . ' xmlns:og="http://ogp.me/ns#"';
+	return $xmlns . prefix="og: http://ogp.me/ns#"';
 }
 
 /**
